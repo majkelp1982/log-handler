@@ -9,6 +9,7 @@ import pl.smarthouse.loghandler.model.InfoDto;
 import pl.smarthouse.loghandler.repository.reactive.ReactiveErrorRepository;
 import pl.smarthouse.loghandler.repository.reactive.ReactiveInfoRepository;
 import pl.smarthouse.loghandler.utils.ModelMapper;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -30,5 +31,9 @@ public class LogHandlerService {
   public Mono<InfoDto> saveInfo(final InfoDto infoDto) {
     final InfoDao infoDao = ModelMapper.toInfoDao(infoDto);
     return reactiveInfoRepository.save(infoDao);
+  }
+
+  public Flux<ErrorDto> findByModuleName(final String moduleName) {
+    return reactiveErrorRepository.findByModuleName(moduleName);
   }
 }

@@ -24,7 +24,7 @@ public class LogConfiguration {
 
   private HttpClient httpClient() {
     return HttpClient.create()
-        .baseUrl("localhost:9998")
+        .baseUrl("192.168.0.200:9998")
         .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
         .responseTimeout(Duration.ofMillis(5000))
         .doOnConnected(

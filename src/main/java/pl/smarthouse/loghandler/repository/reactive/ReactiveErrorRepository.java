@@ -6,6 +6,7 @@ import pl.smarthouse.loghandler.model.ErrorDao;
 import pl.smarthouse.loghandler.model.ErrorDto;
 import pl.smarthouse.loghandler.repository.ErrorRepository;
 import pl.smarthouse.loghandler.utils.ModelMapper;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
@@ -16,5 +17,11 @@ public class ReactiveErrorRepository {
 
   public Mono<ErrorDto> save(final ErrorDao errorDao) {
     return errorRepository.save(errorDao).map(element -> ModelMapper.toErrorDto(element));
+  }
+
+  public Flux<ErrorDto> findByModuleName(final String moduleName) {
+    return errorRepository
+        .findByModuleName(moduleName)
+        .map(element -> ModelMapper.toErrorDto(element));
   }
 }
