@@ -1,9 +1,9 @@
 package pl.smarthouse.loghandler.utils;
 
-import pl.smarthouse.loghandler.model.ErrorDao;
-import pl.smarthouse.loghandler.model.ErrorDto;
-import pl.smarthouse.loghandler.model.InfoDao;
-import pl.smarthouse.loghandler.model.InfoDto;
+import pl.smarthouse.loghandler.model.dao.ErrorDao;
+import pl.smarthouse.loghandler.model.dto.ErrorDto;
+import pl.smarthouse.loghandler.model.dao.InfoDao;
+import pl.smarthouse.loghandler.model.dto.InfoDto;
 
 public class ModelMapper {
   public static ErrorDao toErrorDao(final ErrorDto errorDto) {

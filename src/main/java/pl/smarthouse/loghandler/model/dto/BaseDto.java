@@ -1,14 +1,15 @@
-package pl.smarthouse.loghandler.model;
+package pl.smarthouse.loghandler.model.dto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
+@SuperBuilder
+@NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class InfoDto {
+public class BaseDto {
   private String id;
   private String moduleName;
   private String message;

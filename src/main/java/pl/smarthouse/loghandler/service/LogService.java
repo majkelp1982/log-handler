@@ -1,37 +1,52 @@
 package pl.smarthouse.loghandler.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import pl.smarthouse.loghandler.configuration.LogConfiguration;
-import pl.smarthouse.loghandler.model.ErrorDto;
-import pl.smarthouse.loghandler.model.InfoDto;
+import pl.smarthouse.loghandler.model.dto.BaseDto;
+import pl.smarthouse.loghandler.model.dto.ErrorDto;
+import pl.smarthouse.loghandler.model.dto.InfoDto;
 import reactor.core.publisher.Mono;
 
 @Service
+@Slf4j
 public class LogService {
   LogConfiguration logConfiguration = new LogConfiguration();
 
-  public Mono<ErrorDto> error(final ErrorDto errorDto) {
-    System.out.println(errorDto.toString());
+  public Mono<BaseDto> error(final ErrorDto errorDto) {
+    log.error(errorDto.toString());
     return logConfiguration
         .webClient()
         .post()
         .uri("/error")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(errorDto)
-        .retrieve()
-        .bodyToMono(ErrorDto.class);
+        .exchangeToMono(clientResponse -> processResponse(ErrorDto.class, clientResponse));
   }
 
-  public Mono<InfoDto> info(final InfoDto infoDto) {
-    System.out.println(infoDto.toString());
+  public Mono<BaseDto> info(final InfoDto infoDto) {
+    log.info(infoDto.toString());
     return logConfiguration
         .webClient()
         .post()
         .uri("/info")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(infoDto)
-        .retrieve()
-        .bodyToMono(InfoDto.class);
+        .exchangeToMono(clientResponse -> processResponse(InfoDto.class, clientResponse));
+  }
+
+  private Mono<BaseDto> processResponse(final Class clazz, final ClientResponse clientResponse) {
+    if (clientResponse.statusCode().is2xxSuccessful()) {
+      return clientResponse.bodyToMono(clazz);
+    } else {
+      return Mono.error(
+          new RuntimeException(
+              String.format(
+                  "Error on communication with log service. Status code: %s, Reason: %s",
+                  clientResponse.statusCode(),
+                  clientResponse.body((inputMessage, context) -> inputMessage.getBody()))));
+    }
   }
 }

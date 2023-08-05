@@ -1,7 +1,7 @@
 package pl.smarthouse.loghandler.utils;
 
-import pl.smarthouse.loghandler.model.ErrorDto;
-import pl.smarthouse.loghandler.model.InfoDto;
+import pl.smarthouse.loghandler.model.dto.ErrorDto;
+import pl.smarthouse.loghandler.model.dto.InfoDto;
 
 public class LogUtils {
 
